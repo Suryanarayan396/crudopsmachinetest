@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controller/managehomepage_controller.dart';
+import 'package:flutter_application_1/main.dart';
 
 import 'package:flutter_application_1/utils/constants/colorconst.dart';
 
@@ -23,6 +24,7 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
         Provider.of<ManagehomepageController>(context, listen: false);
     homeprov.fetchCourses();
     homeprov.fetchStaff();
+    homeprov.fetchTimetables();
   }
 
   @override
@@ -91,7 +93,40 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
                       },
                     );
                   },
-                )
+                ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text("Timetable"),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: homeprov.timetables.length,
+                  itemBuilder: (context, index) {
+                    final timetable = homeprov.timetables[index];
+                    return ListTile(
+                      title: Text("${timetable.subject}-${timetable.day}"),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Staff:${timetable.staffId}"),
+                          Text(
+                              "Time:${timetable.startTime}-${timetable.endTime}"),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        onPressed: () async {
+                          await homeprov.deletetimetable(timetable.id);
+                        },
+                        icon: Icon(Icons.delete),
+                      ),
+                      onTap: () {
+                        // staff item handle
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -121,6 +156,21 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
                 tooltip: 'Add Staff',
                 child: Icon(
                   Icons.person_2_rounded,
+                  size: 28,
+                  color: Colorconst.textwhite,
+                ),
+                backgroundColor: Colorconst.darkblue,
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              FloatingActionButton(
+                onPressed: () {
+                  homeprov.createtimetable(context);
+                },
+                tooltip: 'Timetable',
+                child: Icon(
+                  Icons.table_rows_rounded,
                   size: 28,
                   color: Colorconst.textwhite,
                 ),

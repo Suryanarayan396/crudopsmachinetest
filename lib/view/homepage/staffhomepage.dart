@@ -10,6 +10,10 @@ class Staffhomepage extends StatefulWidget {
 class _StaffhomepageState extends State<Staffhomepage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("staff page"),
+      ),
+    );
   }
 }

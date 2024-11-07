@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/database_helper.dart';
 import 'package:flutter_application_1/model/course_model.dart';
 import 'package:flutter_application_1/model/staff_model.dart';
+import 'package:flutter_application_1/model/timetable_model.dart';
 import 'package:flutter_application_1/view/homepage/managehomepage/components/StaffDialog.dart';
 import 'package:flutter_application_1/view/homepage/managehomepage/components/coursedialog.dart';
+import 'package:flutter_application_1/view/homepage/managehomepage/components/timtableDialog.dart';
 
 class ManagehomepageController with ChangeNotifier {
   List<Staff> staffList = [];
   List<Course> courses = [];
   final DatabaseHelper _dbHelper = DatabaseHelper.instance;
+  List<Timetable> timetables = [];
 
   // Future<void> fetchStaff() async {
   //   final staffRows = await _dbHelper.getStaff();
@@ -163,5 +166,57 @@ class ManagehomepageController with ChangeNotifier {
     staffList.removeWhere((staff) => staff.id == staffId);
 
     notifyListeners(); // Notify UI to update
+  }
+
+  // timetable section
+
+  Future<void> saveTimetable(Map<String, dynamic> timetableData) async {
+    final timetableId = await _dbHelper.insertTimetable(timetableData);
+
+    // Optionally, fetch the latest timetable after saving it
+    fetchTimetables();
+  }
+
+  Future<void> createtimetable(BuildContext context) async {
+    final Map<String, List<String>>? timetable =
+        await showDialog<Map<String, List<String>>>(
+      context: context,
+      builder: (context) => TimetableDialog(),
+    );
+
+    if (timetable != null) {
+      // Save the timetable to the database
+      final timetableId = await _dbHelper
+          .insertTimetable({'timetable_data': timetable.toString()});
+
+      // After saving,fetch timetable data
+      fetchTimetables();
+    }
+  }
+
+  Future<void> fetchTimetables() async {
+    final timetableRows = await _dbHelper.getTimetables();
+    timetables = timetableRows.map((timetableRow) {
+      return Timetable(
+        id: timetableRow['id'],
+        courseId: timetableRow['course_id'],
+        subject: timetableRow['subject'],
+        staffId: timetableRow['staff_id'],
+        day: timetableRow['day'],
+        startTime: timetableRow['start_time'],
+        endTime: timetableRow['end_time'],
+      );
+    }).toList();
+    notifyListeners();
+  }
+
+  Future<void> deletetimetable(int timetableId) async {
+    try {
+      await _dbHelper.deletetimetable(timetableId);
+      fetchTimetables();
+      notifyListeners();
+    } catch (e) {
+      print("error deleting");
+    }
   }
 }

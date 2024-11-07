@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/homepage/managehomepage/managementhomepage.dart';
+import 'package:flutter_application_1/view/homepage/staffhomepage.dart';
+import 'package:flutter_application_1/database_helper.dart';
 
 class LoginController extends ChangeNotifier {
   final PageController pageController = PageController();
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   TextEditingController staffidcontroller = TextEditingController();
   TextEditingController mngidcontroller = TextEditingController();
   TextEditingController mngpasscontroller = TextEditingController();
@@ -14,6 +17,9 @@ class LoginController extends ChangeNotifier {
 //management id and password
   String adminid = "Admin01";
   String password = "Admin@123";
+
+  //database controll
+  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
 
   void toggleStaffManagement(String selection) {
     if (selection == "STAFF") {
@@ -47,13 +53,27 @@ class LoginController extends ChangeNotifier {
   }
 
   // Method to handle login validation for staff
-  void staffLogin(BuildContext context) {
+  Future<void> tostaffhomepage(BuildContext context) async {
     if (formkey.currentState?.validate() ?? false) {
-      // Navigate to a different page for staff after successful validation
-      // You can replace this with the actual navigation logic
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Staff Login Successful')),
+      List<Map<String, dynamic>> staffRows = await _dbHelper.getStaff();
+
+      final staff = staffRows.firstWhere(
+        (staff) => staff["name"] == staffidcontroller.text,
       );
+
+      if (staffidcontroller == staff &&
+          staffpasscontroller.text == staff["staff_code"]) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Staffhomepage(), // Assuming this exists
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid Admin ID or Password')),
+        );
+      }
     }
   }
 }

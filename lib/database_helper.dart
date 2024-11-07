@@ -51,6 +51,20 @@ class DatabaseHelper {
         staff_code TEXT NOT NULL
       );
     ''');
+
+    await db.execute('''
+    CREATE TABLE timetable(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      course_id INTEGER,
+      subject TEXT NOT NULL,
+      staff_id INTEGER,
+      day TEXT NOT NULL,
+      start_time TEXT NOT NULL,
+      end_time TEXT NOT NULL,
+      FOREIGN KEY (course_id) REFERENCES courses(id),
+      FOREIGN KEY (staff_id) REFERENCES staff(id)
+    );
+  ''');
   }
 
   // Insert a new course
@@ -120,6 +134,28 @@ class DatabaseHelper {
       "staff",
       where: "id=?",
       whereArgs: [staffId],
+    );
+  }
+//timetable strorage
+
+  Future<int> insertTimetable(Map<String, dynamic> timetableData) async {
+    final db = await database;
+    return await db.insert('timetable', timetableData);
+  }
+
+  Future<List<Map<String, dynamic>>> getTimetables() async {
+    final db = await database;
+    return await db.query('timetable');
+  }
+
+  //delete timetable
+
+  Future<void> deletetimetable(int timetableId) async {
+    final db = await database;
+    await db.delete(
+      "timetable",
+      where: "id=?",
+      whereArgs: [timetableId],
     );
   }
 }
