@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controller/managehomepage_controller.dart';
+
 import 'package:flutter_application_1/utils/constants/colorconst.dart';
 
 import 'package:provider/provider.dart';
@@ -13,17 +14,86 @@ class ManagementaHomepage extends StatefulWidget {
 
 class _ManagementaHomepageState extends State<ManagementaHomepage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // Fetch courses and staff data when the page loads
+    final homeprov =
+        Provider.of<ManagehomepageController>(context, listen: false);
+    homeprov.fetchCourses();
+    homeprov.fetchStaff();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<ManagehomepageController>(
       builder: (context, homeprov, child) => Scaffold(
           appBar: AppBar(
             title: Text('Course Manager'),
           ),
-          body: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return ListTile();
-            },
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text("courses"),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: homeprov.courses.length,
+                  itemBuilder: (context, index) {
+                    final course = homeprov.courses[index];
+                    return ListTile(
+                      title: Text(course.courseName),
+                      subtitle: Text(course.subjects.join(",")),
+                      trailing: IconButton(
+                        onPressed: () async {
+                          await homeprov.deleteCourse(course.id);
+                        },
+                        icon: Icon(Icons.delete),
+                      ),
+                      onTap: () {
+                        // course item tap
+                      },
+                    );
+                  },
+                ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text("staff"),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: homeprov.staffList.length,
+                  itemBuilder: (context, index) {
+                    final staff = homeprov.staffList[index];
+                    return ListTile(
+                      title: Text(staff.name),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(staff.phoneNumber),
+                          Text("staff code:${staff.code}"),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        onPressed: () async {
+                          await homeprov.deleteStaff(staff.id);
+                        },
+                        icon: Icon(Icons.delete),
+                      ),
+                      onTap: () {
+                        // staff item handle
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
           ),
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
