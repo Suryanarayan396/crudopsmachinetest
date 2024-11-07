@@ -79,13 +79,22 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
                   itemBuilder: (context, index) {
                     final course = homeprov.courses[index];
                     return ListTile(
-                      title: Text(course.courseName),
-                      subtitle: Text(course.subjects.join(",")),
+                      title: Text(
+                        course.courseName,
+                        style: TextStyle(fontSize: 30),
+                      ),
+                      subtitle: Text(
+                        course.subjects.join("\n"),
+                        style: TextStyle(fontSize: 20),
+                      ),
                       trailing: IconButton(
                         onPressed: () async {
                           await homeprov.deleteCourse(course.id);
                         },
-                        icon: Icon(Icons.delete),
+                        color: Colorconst.darkred,
+                        icon: Icon(
+                          Icons.delete,
+                        ),
                       ),
                       onTap: () {
                         // course item tap
@@ -110,19 +119,29 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
                   itemBuilder: (context, index) {
                     final staff = homeprov.staffList[index];
                     return ListTile(
-                      title: Text(staff.name),
+                      title: Text(
+                        staff.name,
+                        style: TextStyle(fontSize: 30),
+                      ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(staff.phoneNumber),
-                          Text("staff code:${staff.code}"),
+                          Text(
+                            staff.phoneNumber,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text("staff code:${staff.code}",
+                              style: TextStyle(fontSize: 20)),
                         ],
                       ),
                       trailing: IconButton(
                         onPressed: () async {
                           await homeprov.deleteStaff(staff.id);
                         },
-                        icon: Icon(Icons.delete),
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colorconst.darkred,
+                        ),
                       ),
                       onTap: () {
                         // staff item handle
@@ -160,7 +179,10 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
                         onPressed: () async {
                           await homeprov.deletetimetable(timetable.id);
                         },
-                        icon: Icon(Icons.delete),
+                        color: Colorconst.darkred,
+                        icon: Icon(
+                          Icons.delete,
+                        ),
                       ),
                       onTap: () {
                         // staff item handle
