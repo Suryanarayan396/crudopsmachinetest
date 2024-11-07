@@ -66,7 +66,8 @@ class LoginController extends ChangeNotifier {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Staffhomepage(), // Assuming this exists
+            builder: (context) =>
+                Staffhomepage(staffId: staff['id']), // Assuming this exists
           ),
         );
       } else {

@@ -6,6 +6,8 @@ import 'package:flutter_application_1/model/timetable_model.dart';
 import 'package:flutter_application_1/view/homepage/managehomepage/components/StaffDialog.dart';
 import 'package:flutter_application_1/view/homepage/managehomepage/components/coursedialog.dart';
 import 'package:flutter_application_1/view/homepage/managehomepage/components/timtableDialog.dart';
+import 'package:flutter_application_1/view/loginsignup_page/loginsignup.dart';
+import 'package:path/path.dart';
 
 class ManagehomepageController with ChangeNotifier {
   List<Staff> staffList = [];
@@ -24,6 +26,14 @@ class ManagehomepageController with ChangeNotifier {
   //   }).toList();
   //   notifyListeners();
   // }
+
+  void logoutmanagement(BuildContext context) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginSignupScreen(),
+        ));
+  }
 
   Future<void> addStaff(BuildContext context) async {
     final Staff? newStaff = await showDialog<Staff>(

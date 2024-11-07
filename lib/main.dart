@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controller/managehomepage_controller.dart';
 import 'package:flutter_application_1/controller/login_controller.dart';
+import 'package:flutter_application_1/controller/staffpage_controller.dart';
 import 'package:flutter_application_1/view/homepage/managehomepage/managementhomepage.dart';
 import 'package:flutter_application_1/view/loginsignup_page/loginsignup.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,9 @@ class timetable extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => LoginController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => StaffpageController(),
         ),
       ],
       child: MaterialApp(

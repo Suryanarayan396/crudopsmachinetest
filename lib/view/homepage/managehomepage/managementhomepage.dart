@@ -33,6 +33,14 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
       builder: (context, homeprov, child) => Scaffold(
           appBar: AppBar(
             title: Text('Course Manager'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.logout_rounded),
+                onPressed: () {
+                  homeprov.logoutmanagement(context);
+                },
+              )
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(
