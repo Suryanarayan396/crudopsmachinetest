@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/utils/constants/colorconst.dart';
 import 'package:flutter_application_1/controller/login_controller.dart';
 import 'package:flutter_application_1/utils/widgets/textheading_widget.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 // Login form page
 class Loginform extends StatelessWidget {
@@ -176,8 +178,40 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: InkWell(
-        onTap: () {
-          // Add your action for "Student" button
+        onTap: () async {
+          // Show confirmation dialog before deleting the database
+          bool deleteConfirmed = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text("Are you sure?"),
+              content:
+                  const Text("This will delete all data from the database."),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Cancel delete
+                  },
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // Confirm delete
+                  },
+                  child: const Text("Delete"),
+                ),
+              ],
+            ),
+          );
+
+          if (deleteConfirmed) {
+            // Call deleteDatabaseFile() to delete the database
+            await deleteDatabaseFile();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text(
+                      "Database deleted and will be recreated next time.")),
+            );
+          }
         },
         child: TextheadingWidget(
           title: "Student",
@@ -265,5 +299,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> deleteDatabaseFile() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'course_manager.db');
+    await deleteDatabase(path); // Deletes the entire database file
+    print("Database deleted and will be recreated next time.");
   }
 }
