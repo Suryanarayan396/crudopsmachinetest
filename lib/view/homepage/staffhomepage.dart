@@ -3,6 +3,7 @@ import 'package:flutter_application_1/controller/staffpage_controller.dart';
 import 'package:flutter_application_1/database_helper.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/model/timetable_model.dart';
+import 'package:flutter_application_1/utils/constants/colorconst.dart';
 import 'package:provider/provider.dart';
 
 class Staffhomepage extends StatefulWidget {
@@ -27,13 +28,21 @@ class _StaffhomepageState extends State<Staffhomepage> {
     return Consumer<StaffpageController>(
       builder: (context, staffprov, child) => Scaffold(
         appBar: AppBar(
+          toolbarHeight: 70,
+          backgroundColor: Colorconst.darkblue,
           title: Text("Staff timetable"),
           actions: [
-            IconButton(
-              icon: Icon(Icons.logout_rounded),
-              onPressed: () {
-                staffprov.logoutstaff(context);
-              },
+            CircleAvatar(
+              child: IconButton(
+                icon: Icon(
+                  Icons.logout_rounded,
+                  size: 25,
+                  color: Colorconst.darkred,
+                ),
+                onPressed: () {
+                  staffprov.logoutstaff(context);
+                },
+              ),
             )
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter_application_1/controller/managehomepage_controller.dart'
 import 'package:flutter_application_1/main.dart';
 
 import 'package:flutter_application_1/utils/constants/colorconst.dart';
+import 'package:flutter_application_1/utils/widgets/textheading_widget.dart';
 
 import 'package:provider/provider.dart';
 
@@ -29,25 +30,47 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Consumer<ManagehomepageController>(
       builder: (context, homeprov, child) => Scaffold(
           appBar: AppBar(
-            title: Text('Course Manager'),
+            toolbarHeight: 70,
+            backgroundColor: Colorconst.darkblue,
+            title: Text(
+              'Course Manager',
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colorconst.textwhite),
+            ),
             actions: [
-              IconButton(
-                icon: Icon(Icons.logout_rounded),
-                onPressed: () {
-                  homeprov.logoutmanagement(context);
-                },
+              CircleAvatar(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.logout_rounded,
+                    size: 25,
+                    color: Colorconst.darkred,
+                  ),
+                  onPressed: () {
+                    homeprov.logoutmanagement(context);
+                  },
+                ),
               )
             ],
           ),
           body: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.all(8),
-                  child: Text("courses"),
+                  child: TextheadingWidget(
+                      title: "Courses",
+                      containercolor: Colorconst.darkblue,
+                      height: size.height * 0.065,
+                      width: size.width * 0.4,
+                      textcolor: Colorconst.textwhite),
                 ),
                 ListView.builder(
                   shrinkWrap: true,
@@ -73,7 +96,12 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
                 Divider(),
                 Padding(
                   padding: EdgeInsets.all(8),
-                  child: Text("staff"),
+                  child: TextheadingWidget(
+                      title: "Staff",
+                      containercolor: Colorconst.darkblue,
+                      height: size.height * 0.065,
+                      width: size.width * 0.4,
+                      textcolor: Colorconst.textwhite),
                 ),
                 ListView.builder(
                   shrinkWrap: true,
@@ -105,7 +133,12 @@ class _ManagementaHomepageState extends State<ManagementaHomepage> {
                 Divider(),
                 Padding(
                   padding: EdgeInsets.all(8),
-                  child: Text("Timetable"),
+                  child: TextheadingWidget(
+                      title: "Timetable",
+                      containercolor: Colorconst.darkblue,
+                      height: size.height * 0.065,
+                      width: size.width * 0.4,
+                      textcolor: Colorconst.textwhite),
                 ),
                 ListView.builder(
                   shrinkWrap: true,
